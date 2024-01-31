@@ -168,4 +168,3 @@ class SQLInjectionChecker(SQLInjectionTester):
             else:
                 print("No flag found.")
         # 无=>暂时不考虑
-
