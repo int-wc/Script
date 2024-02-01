@@ -1,4 +1,4 @@
-POST / HTTP/1.1
+POST http://26947e5e-3457-4b08-8b60-10a1af81cd51.node5.buuoj.cn:81/ HTTP/1.1
 Host: 26947e5e-3457-4b08-8b60-10a1af81cd51.node5.buuoj.cn:81
 Proxy-Connection: keep-alive
 Content-Length: 7
@@ -11,6 +11,6 @@ Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/w
 Referer: http://26947e5e-3457-4b08-8b60-10a1af81cd51.node5.buuoj.cn:81/
 Accept-Encoding: gzip, deflate
 Accept-Language: zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6
-Cookie: PHPSESSID=53bd3ed93d4de614a9df526198bd0c47
+Cookie: PHPSESSID=b7ca19c070a67f0df379f7c0b0391026
 
-query=1
+query=2
