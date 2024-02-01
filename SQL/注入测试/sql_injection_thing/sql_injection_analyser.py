@@ -6,7 +6,7 @@ class Analyser:
     def __init__(self) -> None:
         pass
     def analyze_html(self, url):
-        #现在是array类型
+        '''现在是array类型'''
         response = requests.get(url)
         html_content = response.text
 
