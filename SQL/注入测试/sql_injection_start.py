@@ -1,5 +1,17 @@
-import conlletion_thing.Use
+import collection_thing.selfproxy
 from sql_injection_thing.sql_injection_checker import SQLInjectionChecker
+import multiprocessing
+
+def menu():
+    print("\033[91m1. POST [这将会打开一个代理，请你手动先让post包发出]\033[0m")
+    print("\033[91m2. GET [这需要你输入url，手动输入过一次参数，会自动运行]\033[0m")
+
+    while True:
+        choice = input("请选择操作（1-POST，2-GET）：")
+        if choice in ["1", "2"]:
+            return int(choice)
+        else:
+            print("无效的选择，请重新选择")
 
 if __name__ == "__main__":
     draw = '''\033[92m
@@ -12,14 +24,16 @@ if __name__ == "__main__":
                                                                            | |                 | |    
                                                                            |_|                 |_|    \033[0m'''
     print(draw)
-    print("\033[91m打开了一个代理服务器，请在浏览器先对指定url下手\033[0m")
+    choice = menu()
 
     if choice == 1:
-        checker = SQLInjectionChecker("")
-        file_path = input("请输入文件具体位置（绝对路径）：")
-        checker.analyser.analyze_post_request(file_path)
-
-    elif choice == "2":
+        # 在一个单独的进程中启动代理服务器
+        proxy_process = multiprocessing.Process(target=collection_thing.selfproxy.start_proxy_server)
+        proxy_process.start()
+        # 监听键盘输入，当检测到键盘输入时，结束代理服务器进程
+        input("\n\033[94m按下回车键结束代理服务器\033[0m\n")
+        proxy_process.terminate()
+    elif choice == 2:
         url = input("请输入URL: ")
         checker = SQLInjectionChecker(url)
         checker.start()

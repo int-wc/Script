@@ -89,13 +89,9 @@ def start_proxy_server():
     global is_running  # 声明 is_running 为全局变量
 
     while is_running:
-        try:
-            client_socket, addr = proxy_server.accept()
-            client_handler = threading.Thread(target=handle_client, args=(client_socket,))
-            client_handler.start()
-        except KeyboardInterrupt:
-            is_running = False  # 当检测到键盘输入时，停止代理服务器的运行
-            break
-
+        client_socket, addr = proxy_server.accept()
+        client_handler = threading.Thread(target=handle_client, args=(client_socket,))
+        client_handler.start()
+        
     # 关闭代理服务器
     proxy_server.close()
