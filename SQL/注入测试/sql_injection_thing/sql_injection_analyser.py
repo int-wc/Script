@@ -21,3 +21,13 @@ class Analyser:
 
         return result_list
     
+    def analyze_post_request(self,request):
+        body = request.split('\r\n\r\n')[-1]
+        print(body)
+        params = body.split('&')
+        parsed_params = {}
+        for param in params:
+            key, value = param.split('=')
+            parsed_params[key] = value
+        print(parsed_params)
+        return parsed_params

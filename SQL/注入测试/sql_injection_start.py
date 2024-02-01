@@ -13,11 +13,15 @@ if __name__ == "__main__":
                                                                            |_|                 |_|    \033[0m'''
     print(draw)
     print("\033[91m如果选择POST方式，请通过接下来的方式，将POST的请求包保存\033[0m")
-    url = input("请先输入URL: ")
     choice = int(getrequest.Use.menu())
     if choice == 1:
         getrequest.Use.Use_Post()
+        checker = SQLInjectionChecker("")
+        file_path = input("请输入文件具体位置（绝对路径）：")
+        checker.analyser.analyze_post_request(file_path)
+        
     elif choice == "2":
+        url = input("请输入URL: ")
         checker = SQLInjectionChecker(url)
         checker.start()
     else:
