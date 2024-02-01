@@ -13,10 +13,10 @@ from sql_injection.sql_injection_chooser import Chooser
 #开发post下的传输
 #初步完成一个对post的request包的提取和response转换为代码形式
 
-#1、Analyser完成解析工作
-#2、Tester完成注入点的工作
-#3、Chooser完成选择注入点的工作
-#4、Checker完成注入工作
+#1、Analyser完成解析工作--解析request即可
+#2、Tester完成注入点的工作--测试request，通过response返回网页结果探测
+#3、Chooser完成选择注入点的工作--从上面获取注入点
+#4、Checker完成注入工作--开始注入
 
 
 
