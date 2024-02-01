@@ -9,6 +9,13 @@ import binascii
 
 
 #开发post下的传输
+#初步完成一个对post的request包的提取和response转换为代码形式
+
+#1、Analyser完成解析工作
+#2、Tester完成注入点的工作
+#3、Chooser完成选择注入点的工作
+#4、Checker完成注入工作
+
 
 
 class SQLInjectionChecker(SQLInjectionTester):
