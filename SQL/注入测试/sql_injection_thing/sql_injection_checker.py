@@ -1,11 +1,13 @@
 from urllib.parse import urlencode
 import requests
 import re
-from sql_injection_thing.sql_injection_tester import SQLInjectionTester
 import copy
+import binascii
+
+from sql_injection_thing.sql_injection_tester import SQLInjectionTester
 from sql_injection_thing.sql_injection_analyser import Analyser
 from sql_injection_thing.sql_injection_chooser import Chooser
-import binascii
+
 
 
 #开发post下的传输
