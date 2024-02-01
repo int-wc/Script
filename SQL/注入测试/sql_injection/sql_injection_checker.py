@@ -4,9 +4,9 @@ import re
 import copy
 import binascii
 
-from sql_injection_thing.sql_injection_tester import SQLInjectionTester
-from sql_injection_thing.sql_injection_analyser import Analyser
-from sql_injection_thing.sql_injection_chooser import Chooser
+from sql_injection.sql_injection_tester import SQLInjectionTester
+from sql_injection.sql_injection_analyser import Analyser
+from sql_injection.sql_injection_chooser import Chooser
 
 
 

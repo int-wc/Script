@@ -1,5 +1,5 @@
-import collection_thing.selfproxy
-from sql_injection_thing.sql_injection_checker import SQLInjectionChecker
+import collection.selfproxy
+from sql_injection.sql_injection_checker import SQLInjectionChecker
 import multiprocessing
 
 def menu():
@@ -28,7 +28,7 @@ if __name__ == "__main__":
 
     if choice == 1:
         # 在一个单独的进程中启动代理服务器
-        proxy_process = multiprocessing.Process(target=collection_thing.selfproxy.start_proxy_server)
+        proxy_process = multiprocessing.Process(target=collection.selfproxy.start_proxy_server)
         proxy_process.start()
         # 监听键盘输入，当检测到键盘输入时，结束代理服务器进程
         input("\n\033[94m按下回车键结束代理服务器\033[0m\n")
