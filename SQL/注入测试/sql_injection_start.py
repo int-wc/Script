@@ -1,5 +1,5 @@
 import collection.selfproxy
-from sql_injection.sql_injection_checker import SQLInjectionChecker
+from sql_injection.get.sql_injection_checker_get import SQLInjectionChecker
 import multiprocessing
 
 def menu():
