@@ -18,16 +18,6 @@ class SQLInjectionTester:
         updated_url = urllib.parse.urlunparse((parsed_url.scheme, parsed_url.netloc, parsed_url.path, parsed_url.params, updated_query, parsed_url.fragment))
         return updated_url
 
-
-    # def find_injection_point(self, url):
-    #     parsed_url = urlparse(url)
-    #     query_params = parse_qs(parsed_url.query)
-    #     injection_points = []
-    #     for key, value in query_params.items():
-    #         if any(("'" in v or '"' in v or ')' in v) for v in value):
-    #             injection_points.append(key)
-    #     return injection_points
-
     def find_injection_point(self, url):
         """寻找注入点"""
         parsed_url = urlparse(url)
@@ -58,16 +48,3 @@ class SQLInjectionTester:
             result.append((point, symbol))
             self.injection_points.append((point,symbol))
         return result
-
-#1、测试闭合符号--Done
-#2、爆表
-#3、测试绕过
-#3、展示
-
-# if __name__ == "__main__":
-#     url = input("请输入要测试的URL：")
-#     tester = SQLInjectionTester(url)
-#     results = tester.test_injection_points(url)
-#     print(tester.injection_points)
-#     for point, symbol in results:
-#         print(f"参数: {point}, 注入点的闭合符号: {symbol}")

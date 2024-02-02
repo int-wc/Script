@@ -4,7 +4,7 @@ import multiprocessing
 
 def menu():
     print("\033[91m1. POST [这将会打开一个代理，请你手动先让post包发出]\033[0m")
-    print("\033[91m2. GET [这需要你输入url，手动输入过一次参数，会自动运行]\033[0m")
+    print("\033[91m2. GET [这需要你输入url，手动输入过一次参数，会自动运行][如http://8573974b-50cf-4ff0-91a3-4d7a77103ebe.node5.buuoj.cn:81/?inject=10]\033[0m")
 
     while True:
         choice = input("请选择操作（1-POST，2-GET）：")
@@ -36,6 +36,6 @@ if __name__ == "__main__":
     elif choice == 2:
         url = input("请输入URL: ")
         checker = SQLInjectionChecker(url)
-        checker.start()
+        checker.start_get()
     else:
         print("无效的选择")

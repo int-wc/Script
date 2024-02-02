@@ -12,6 +12,22 @@ proxy_host = "127.0.0.1"
 proxy_port = 1234
 is_running = True  # 标志变量，控制代理服务器的运行状态
 
+def save_fun(filedir, savedir, target, filename, savedata, htmlcontent):
+    folder = os.path.join(filedir, savedir, target, filename)
+    os.makedirs(folder, exist_ok=True)
+
+    requests_sec_folder = os.path.join(folder, "requests")
+    os.makedirs(requests_sec_folder, exist_ok=True)
+    save_file = os.path.join(requests_sec_folder, "request.txt")
+    with open(save_file, 'wb') as request_file:
+        request_file.write(savedata)
+    
+    response_folder = os.path.join(folder, "responses")
+    os.makedirs(response_folder, exist_ok=True)
+    response_filename = os.path.join(response_folder, "response.html")
+    with open(response_filename, 'w', encoding='utf-8') as response_file:
+                    response_file.write(htmlcontent)
+
 def handle_client(client_socket):
     # 接收浏览器的请求
     request_data = client_socket.recv(4096)
@@ -25,7 +41,7 @@ def handle_client(client_socket):
         client_socket.close()
         return
     else:
-        print(f"接收到来自浏览器的请求：{url}")
+        pass
 
     url_parts = urllib.parse.urlsplit(url)
     target_host = url_parts.hostname
@@ -46,30 +62,35 @@ def handle_client(client_socket):
 
     # 接收POST参数值
     if method == 'POST':
+        print(f"接收到来自浏览器的POST请求：{url}")
         post_data = request_data.split(b'\r\n\r\n')[-1]
         post_params = urllib.parse.parse_qs(post_data.decode('utf-8'))
         if post_params:
             for key, value in post_params.items():
                 value_encoded = urllib.parse.quote(value[0], safe='')  # 对参数值进行 URL 编码
-
-                # 创建文件夹路径
-                request_folder = os.path.join(script_directory, "requests", target_host, f"{key}_{value_encoded}")
-                os.makedirs(request_folder, exist_ok=True)
-                request_filename = os.path.join(request_folder, "request.txt")
-                with open(request_filename, 'wb') as request_file:
-                    request_file.write(request_data)
-
                 # 构建新的POST请求
                 new_post_data = {key: value[0]}  # 构建新的POST参数
                 response = requests.post(url, data=new_post_data)  # 发送新的POST请求
                 html_content = response.text  # 获取返回的HTML源码
 
-                # 创建文件夹路径
-                response_folder = os.path.join(script_directory, "responses", target_host, f"{key}_{value_encoded}")
-                os.makedirs(response_folder, exist_ok=True)
-                response_filename = os.path.join(response_folder, "response.html")
-                with open(response_filename, 'w', encoding='utf-8') as response_file:
-                    response_file.write(html_content)
+                save_fun(script_directory, "post_requests_save", target_host, f"{key}_{value_encoded}", request_data, html_content)
+                save_fun(script_directory, "post_requests_save_t", target_host, f"{key}_{value_encoded}", request_data, html_content)
+
+    # # 接收GET参数值
+    # if method == 'GET':
+    #     print(f"接收到来自浏览器的GET请求：{url}")
+    #     get_params = urllib.parse.parse_qs(urllib.parse.urlparse(url).query)
+    #     if get_params:
+    #         for key, value in get_params.items():
+    #             value_encoded = urllib.parse.quote(value[0], safe='')  # 对参数值进行 URL 编码
+
+    #             # 发送GET请求
+    #             response = requests.get(url)  # 发送GET请求
+    #             html_content = response.text  # 获取返回的HTML源码
+                
+    #             save_fun(script_directory, "post_requests_save", target_host, f"{key}_{value_encoded}", request_data, html_content)
+    #             save_fun(script_directory, "post_requests_save_t", target_host, f"{key}_{value_encoded}", request_data, html_content)
+
 
     # 将响应发送给浏览器
     client_socket.send(response_data)

