@@ -32,14 +32,14 @@ class SQLInjectionChooserPOST:
         while True:
             print("\033[2J\033[;H")  # 清屏
             draw = '''\033[92m
-   _____      _  __  _____ _______ ______ _______          _                  _                       
-  / ____|    | |/ _|/ ____|__   __|  ____|__   __|        | |                | |                      
- | (___   ___| | |_| |       | |  | |__     | | ___   ___ | |______ ___  __ _| |_ __ ___   __ _ _ __  
-  \\___ \\ / _ \\ |  _| |       | |  |  __|    | |/ _ \\ / _ \\| |______/ __|/ _` | | '_ ` _ \\ / _` | '_ \\ 
-  ____) |  __/ | | | |____   | |  | |       | | (_) | (_) | |      \\__ \\ (_| | | | | | | | (_| | |_) |
- |_____/ \\___|_|_|  \\_____|  |_|  |_|       |_|\\___/ \\___/|_|      |___/\\__, |_|_| |_| |_|\\__,_| .__/ 
-                                                                           | |                 | |    
-                                                                           |_|                 |_|    \033[0m'''
+   _____ ______ _      ______ _____ _______ ______ _______          _        _____  ____  _      _       _           _   
+  / ____|  ____| |    |  ____/ ____|__   __|  ____|__   __|        | |      / ____|/ __ \\| |    (_)     (_)         | |  
+ | (___ | |__  | |    | |__ | |       | |  | |__     | | ___   ___ | |_____| (___ | |  | | |     _ _ __  _  ___  ___| |_ 
+  \\___ \\|  __| | |    |  __|| |       | |  |  __|    | |/ _ \\ / _ \\| |______\\___ \\| |  | | |    | | '_ \\| |/ _ \\/ __| __|
+  ____) | |____| |____| |   | |____   | |  | |       | | (_) | (_) | |      ____) | |__| | |____| | | | | |  __/ (__| |_ 
+ |_____/|______|______|_|    \\_____|  |_|  |_|       |_|\\___/ \\___/|_|     |_____/ \\___\\_\\______|_|_| |_| |\\___|\\___|\\__|
+                                                                                                       _/ |              
+                                                                                                      |__/               \033[0m'''
             print(draw)
             if self.selected_file_content != None:
                 print(f"\033[91m已选择文件：{os.path.relpath(self.selected_file_path, self.root_directory)}\033[0m")
@@ -73,12 +73,10 @@ class SQLInjectionChooserPOST:
 
     # 示例用法
     def choose_file(self):
-        target_folder = 'collection'
+        target_folder = 'post_requests_save_t'
         self.search_target_directory(self.root_directory, target_folder)
         if self.found_directory:
-            selected_file = self.print_files_interactively(self.found_directory)
-            if selected_file:
-                print("选择的文件的绝对地址:", selected_file)
+            self.print_files_interactively(self.found_directory)
 
 # # 示例用法
 # tester = SQLInjectionChooserPOST('example_file')

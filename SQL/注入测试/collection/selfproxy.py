@@ -63,6 +63,7 @@ def handle_client(client_socket):
     # 接收POST参数值
     if method == 'POST':
         print(f"接收到来自浏览器的POST请求：{url}")
+        print("请等待保存")
         post_data = request_data.split(b'\r\n\r\n')[-1]
         post_params = urllib.parse.parse_qs(post_data.decode('utf-8'))
         if post_params:
@@ -75,7 +76,7 @@ def handle_client(client_socket):
 
                 save_fun(script_directory, "post_requests_save", target_host, f"{key}_{value_encoded}", request_data, html_content)
                 save_fun(script_directory, "post_requests_save_t", target_host, f"{key}_{value_encoded}", request_data, html_content)
-
+    print("已保存request和response包")
     # # 接收GET参数值
     # if method == 'GET':
     #     print(f"接收到来自浏览器的GET请求：{url}")
